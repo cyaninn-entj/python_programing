@@ -5,10 +5,11 @@ num1, num2, res = 0, 0, 0
 swidth, sheight = 1000, 500
 curX, curY = 0, 0
  
-## 2진수를 거북이로 표현하는 함수 ##
-def binaryToTurtle(binary, num):    # 10진수 num과 num을 2진수로 바꾼 binary를 인자로 받음
-    curX = swidth / 2
  
+## 2진수를 거북이로 표현하는 함수 ##
+def binaryToTurtle(binary, num): 
+    curX = swidth / 2
+
     # main 부분에서 실제 거북이를 찍는 부분만 따로 가져옴
     for i in range(len(binary) - 2) :
         turtle.goto(curX, curY)
@@ -22,7 +23,8 @@ def binaryToTurtle(binary, num):    # 10진수 num과 num을 2진수로 바꾼 b
             turtle.stamp()
         curX -= 50
         num >>= 1 
- 
+
+
 ## 메인 코드 부분 ##
 if __name__ == "__main__":
     turtle.title('거북이로 2진수 표현하기')
@@ -33,7 +35,8 @@ if __name__ == "__main__":
     turtle.left(90)
  
     ## 두 개의 숫자를 입력받음 ##
-    num1, num2 = map(int, input("숫자를 2개 입력하세요 : ").strip().split(' '))
+    num1 = int(input("첫번째 숫자 입력 : "))
+    num2 = int(input("두번째 숫자 입력 : "))
     curY = 0        # 첫 번째 숫자 출력할 Y축 위치
     binaryToTurtle(bin(num1), num1)
     curY = -50       # 두 번째 숫자 출력할 Y축 위치
