@@ -73,40 +73,57 @@ def getWidth() :
 
 #사각형 이벤트 함수
 def startDrawRect(event):
-    global x1, y1, x2, y2, shapes
+    global x1, y1, x2, y2, shapes_rect
     x1=event.x
     y1=event.y
 def endDrawRect(event) :
-    global x1, y1, x2, y2, shapes
+    global x1, y1, x2, y2, shapes_rect
     x2=event.x
     y2=event.y
     rect=Rectangle(x1,y1,x2,y2,getColor(),getWidth()) #사각형 생성
-    shapes.append(rect) #전체 도형 리스트에 추가
+    shapes_rect.append(rect) #전체 도형 리스트에 추가
 
 #원 이벤트 함수
 def startDrawCircle(event) :
-    global x1, y1, x2, y2, shapes
+    global x1, y1, x2, y2, shapes_cir
     x1=event.x
     y1=event.y
 def endDrawCircle(event) :
-    global x1, y1, x2, y2, shapes
+    global x1, y1, x2, y2, shapes_cir
     x2=event.x
     y2=event.y
     cir=Circle(x1,y1,x2,y2,getColor(),getWidth()) #원 생성
-    shapes.append(cir) #전체 도형 리스트에 추가
+    shapes_cir.append(cir) #전체 도형 리스트에 추가
 
+'''
 #마지막에 그린 도형 제거
 def deleteShape(event) :
     global shapes
     if len(shapes) != 0 :
         shp = shapes.pop()
         del(shp)
+'''
+
+#마지막에 그린 사각형 제거
+def delete_rect(event) :
+    global shapes_rect
+    if len(shapes_rect) != 0 :
+        shp = shapes_rect.pop()
+        del(shp)
+
+#마지막에 그린 원 제거
+def delete_cir(event) :
+    global shapes_cir
+    if len(shapes_cir) != 0 :
+        shp = shapes_cir.pop()
+        del(shp)
 
 
 
 
-
-shapes=[]
+#shapes=[]
+shapes_rect=[]
+shapes_cir=[]
 window=None
 canvas=None
 x1, y1, x2, y2 = None, None, None, None
@@ -118,7 +135,11 @@ if __name__ == "__main__" :
     canvas=Canvas(window, height=300, width=300)
     canvas.bind("<Button-1>", startDrawRect)
     canvas.bind("<ButtonRelease-1>", endDrawRect)
-    canvas.bind("<Button-2>", deleteShape)
+    #canvas.bind("<Button-2>", deleteShape)
+    #최근 사각형 제거
+    canvas.bind("<Double-Button-1>", delete_cir)
+    #최근 원 제거
+    canvas.bind("<Double-Button-2>", delete_rect)
     canvas.bind("<Button-3>", startDrawCircle)
     canvas.bind("<ButtonRelease-3>", endDrawCircle)
 
