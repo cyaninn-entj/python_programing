@@ -28,7 +28,7 @@ def refreshDescription() :
 '''
 
 def playGame() :
-    global monitor, ship, monster, missile 
+    global monitor, ship, monster, missile, shipSize
 
     r = random.randrange(0, 256)
     g = random.randrange(0, 256)
@@ -44,7 +44,7 @@ def playGame() :
     monsterSize = monster.get_rect().size                 # 우주괴물 크기
     monsterX = random.randrange(30, 470) #양쪽 30씩 비워줬음 (12.05 추가)
     monsterY = 0 # 상위 30% 위치까지만 >> 위에서 젠되도록 설정함 (12.05 추가)
-    monsterSpeed = random.randrange(1, 10)
+    monsterSpeed = random.randrange(1, 8)
 
     # @기능 4-2 : 미사일 좌표를 초기화한다.
     missileX, missileY = None, None  # None은 미사일을 쏘지 않았다는 의미이다.
@@ -88,6 +88,7 @@ def playGame() :
             and (sheight/2 < shipY+dy and shipY+dy <= sheight - shipSize[1]) :  # 화면의 중앙까지만
             shipX += dx
             shipY += dy
+            
         paintEntity(ship, shipX, shipY)   # 우주선을 화면에 표시한다.
 
         # @기능 3-3 : 우주괴물이 자동으로 나타나 왼쪽에서 오른쪽으로 움직인다. (12.05 추가)
@@ -99,7 +100,7 @@ def playGame() :
             # 우주괴물 이미지를 무작위로 선택한다.
             monster = pygame.image.load(random.choice(monsterImage))
             monsterSize = monster.get_rect().size
-            monsterSpeed = random.randrange(1, 15)
+            monsterSpeed = random.randrange(1, 8)
 
             LifePoint-=1 #추가 (12.05 추가)
            
@@ -119,12 +120,16 @@ def playGame() :
                    (monsterY < missileY and missileY < monsterY + monsterSize[1]) :
                 fireCount += 1
 
-                # 우주괴물을 초기화(무작위 이미지로 다시 준비)
+                # 우주괴물을 초기화(무작위 이미지로 다시 준비) >> (12.6 추가)
                 monster = pygame.image.load(random.choice(monsterImage))
                 monsterSize = monster.get_rect().size
-                monsterX = 0
-                monsterY =random.randrange(0, int(sheight * 0.3))
-                monsterSpeed = random.randrange(1, 5)
+                monsterX = random.randrange(30, 470)
+                monsterY = 0
+                monsterSpeed = random.randrange(1, 8)
+
+                # (12.6 추가)
+                ship = pygame.image.load(random.choice(ship_Image))
+                shipSize = ship.get_rect().size
                 
                 # 미사일을 초기화한다.
                 missileX, missileY= None, None   # 총알이 사라진다.
@@ -153,20 +158,15 @@ ship_Image = ['D:/CODES/last_ex/ship01.png', 'D:/CODES/last_ex/ship02.png', 'D:/
                 'D:/CODES/last_ex/ship04.png']
 
 missile = None     # 미사일
-
-
-# @기능 2-1 : 우주선 이미지를 준비하고 크기를 구한다.
-ship = pygame.image.load('D:/CODES/last_ex/ship02.png')
-shipSize = ship.get_rect().size
-
 # @기능 4-1 : 미사일 이미지를 추가한다.
 missile = pygame.image.load('D:/CODES/last_ex/missile.png')
 
-
+# @기능 2-1 : 우주선 이미지를 준비하고 크기를 구한다.
+ship = pygame.image.load(random.choice(ship_Image))
+shipSize = ship.get_rect().size
 ## 메인 코드 부분 ##
 pygame.init()
 monitor = pygame.display.set_mode((swidth, sheight))
 pygame.display.set_caption('우주괴물 무찌르기') 
   
 playGame()
-
