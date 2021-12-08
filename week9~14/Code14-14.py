@@ -1,5 +1,6 @@
 import pygame
 import random
+from time import sleep
 import sys
 
 
@@ -18,14 +19,23 @@ def writeScore(score) :
 def LifeScore(score) :
     myfont = pygame.font.Font('D:/CODES/last_ex/NanumGothic.ttf', 20)      # 한글 폰트
     txt = myfont.render('생명 : ' + str(score), True, (255-r, 255-g, 255-b))
-    monitor.blit(txt, (90, sheight - 40))   
+    monitor.blit(txt, (110, sheight - 40))
 
-''' # (12.05 추가)
-def refreshDescription() :
-    myfont = pygame.font.Font('D:/CODES/last_ex/NanumGothic.ttf', 20)      # 한글 폰트
-    txt = myfont.render('게임 시작은 S , 재시작은 R 키를 누르시오')
-    monitor.blit(txt, (150, sheight-0))
-'''
+#(12.08 추가)
+def dis_gameover() :
+    myfont = pygame.font.Font('D:/CODES/last_ex/NanumGothic.ttf', 40)      # 한글 폰트
+    txt = myfont.render('우주선 충돌! 게임 오버', True, (255-r, 255-g, 255-b))
+    monitor.blit(txt, (50, 250))
+
+#(12.08 추가)
+def gameOver() :
+    dis_gameover()
+    pygame.display.update()
+    sleep(5)
+    pygame.quit
+    sys.exit()
+
+
 
 def playGame() :
     global monitor, ship, monster, missile, shipSize
@@ -63,6 +73,7 @@ def playGame() :
             if e.type in [pygame.QUIT]  :
                 pygame.quit()
                 sys.exit()
+                
 
             # @기능 2-3 : 방향키에 따라 우주선이 움직이게 한다.
             # 방향키를 누르면 우주선이 이동한다(누르고 있으면 계속 이동). 
@@ -118,7 +129,7 @@ def playGame() :
             # @기능 5-2 : 우주괴물이 미사일에 맞았는지 체크한다. <== 101 ~ 114행 
             if (monsterX < missileX and missileX < monsterX + monsterSize[0]) and \
                    (monsterY < missileY and missileY < monsterY + monsterSize[1]) :
-                fireCount += 1
+                fireCount+=1
 
                 # 우주괴물을 초기화(무작위 이미지로 다시 준비) >> (12.6 추가)
                 monster = pygame.image.load(random.choice(monsterImage))
@@ -133,6 +144,16 @@ def playGame() :
                 
                 # 미사일을 초기화한다.
                 missileX, missileY= None, None   # 총알이 사라진다.
+
+        #(12.08추가) 미사일 괴물 충돌 시 게임 종료
+        ship_rect=ship.get_rect()
+        ship_rect.left=shipX
+        ship_rect.top=shipY
+        monster_rect=monster.get_rect()
+        monster_rect.left=monsterX
+        monster_rect.top=monsterY
+        if ship_rect.colliderect(monster_rect) :
+                gameOver()
 
         # @기능 5-3 : 점수를 화면에 쓰는 함수를 호출한다. <== 117행 
         writeScore(fireCount)
